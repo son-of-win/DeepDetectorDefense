@@ -21,7 +21,7 @@ def test_mnist_data(train_data, train_label, is_adv, Classifier, detectorFilter)
             current_image_res = detectorFilter.scalarQuantization(temp, 4)
         else:
             current_image_ASQ = detectorFilter.scalarQuantization(temp, 6)
-            current_image_crossMean = detectorFilter.crossAndDiamondMeanFilter(current_image_ASQ, 7, 'cross')
+            current_image_crossMean = detectorFilter.MeanFilter(current_image_ASQ, 7, 'cross')
             current_image_res = detectorFilter.chooseCloserFilter(imageEntropy, current_image_ASQ,
                                                                   current_image_crossMean)
         current_x_res = np.reshape(current_image_res, (1, 28, 28, 1))

@@ -27,7 +27,7 @@ train_data, train_label, is_adv = shuffle_data(x_train, y_train, adv, adv_label)
 Classifier = AlexnetClassifier()
 Classifier.load("lenet.h5")
 detectorFilter = DefenderModel(28, 1)
-print(Classifier.evaluate(x_test, y_test))
+# print(Classifier.evaluate(x_test, y_test))
 
 print("num origin: %d \nnum adv: %d" % (len(x_train), len(adv)))
 # test_mnist_data(train_data, train_label, is_adv, Classifier, detectorFilter)

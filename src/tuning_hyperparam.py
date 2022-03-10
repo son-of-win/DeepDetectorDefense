@@ -52,7 +52,7 @@ def boxFilterSizeTuningMnist(train_data, train_label, is_adv, Classifier, detect
                 np.argmax(Classifier.classifier.predict(train_data[i].reshape((1, 28, 28, 1)))))
             temp = np.reshape(train_data[i],
                               (detectorFilter.image_channel, detectorFilter.image_size, detectorFilter.image_size))
-            current_image_res = detectorFilter.boxMeanFilter(temp, kernel)
+            current_image_res = detectorFilter.MeanFilter(temp, kernel, 'box')
             current_x_res = np.reshape(current_image_res, (1, 28, 28, 1))
             current_x_label_predict = np.argmax(Classifier.classifier.predict(current_x_res))
 
@@ -86,7 +86,7 @@ def DiamondFilterSizeTuningMnist(train_data, train_label, is_adv, Classifier, de
                 np.argmax(Classifier.classifier.predict(train_data[i].reshape((1, 28, 28, 1)))))
             temp = np.reshape(train_data[i],
                               (detectorFilter.image_channel, detectorFilter.image_size, detectorFilter.image_size))
-            current_image_res = detectorFilter.crossAndDiamondMeanFilter(temp, kernel, "diamond")
+            current_image_res = detectorFilter.MeanFilter(temp, kernel, "diamond")
             current_x_res = np.reshape(current_image_res, (1, 28, 28, 1))
             current_x_label_predict = np.argmax(Classifier.classifier.predict(current_x_res))
 
@@ -120,7 +120,7 @@ def CrossFilterSizeTuningMnist(train_data, train_label, is_adv, Classifier, dete
                 np.argmax(Classifier.classifier.predict(train_data[i].reshape((1, 28, 28, 1)))))
             temp = np.reshape(train_data[i],
                               (detectorFilter.image_channel, detectorFilter.image_size, detectorFilter.image_size))
-            current_image_res = detectorFilter.crossAndDiamondMeanFilter(temp, kernel, "Cross")
+            current_image_res = detectorFilter.MeanFilter(temp, kernel, "Cross")
             current_x_res = np.reshape(current_image_res, (1, 28, 28, 1))
             current_x_label_predict = np.argmax(Classifier.classifier.predict(current_x_res))
 

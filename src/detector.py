@@ -1,5 +1,6 @@
 import math
 from filter_mask import *
+import numpy as np
 
 
 class DefenderModel:
@@ -72,26 +73,8 @@ class DefenderModel:
                         result[i][j][k] = filter2_image[i][j][k]
         return result
 
-    def boxMeanFilter(self, input_image, filter_size):
+    def MeanFilter(self, input_image, filter_size, type_filter):
         """
-
-        :param input_image: input image
-        :param filter_size: filter size (3,5,7,9...)
-        :return:
-        """
-        start = (filter_size - 1)//2
-        end = self.image_size - start
-        input_image = np.array(input_image, dtype=np.float32)
-        for ch in range(self.image_channel):
-            for row in range(start, end):
-                for col in range(start, end):
-                    input_image[ch] = sum(
-                        sum(input_image[ch][0, row - start:row + start + 1, col - start:col + start + 1]))
-        return input_image / filter_size ** 2
-
-    def crossAndDiamondMeanFilter(self, input_image, filter_size, type_filter):
-        """
-
         :param input_image:
         :param filter_size:
         :param type_filter: type of filter (box, cross or diamond)
@@ -102,12 +85,15 @@ class DefenderModel:
         input_image = np.array(input_image, dtype=np.float32)
         if type_filter == 'diamond':
             kernel_matrix = Filter(filter_size, "diamond")
+        elif type_filter == "box":
+            kernel_matrix = Filter(filter_size, "box")
         else:
             kernel_matrix = Filter(filter_size, "cross")
+        print(input_image[0].shape)
         for row in range(start, end):
             for col in range(start, end):
                 for channel in range(self.image_channel):
-                    input_image[channel][row][col] = sum(sum(input_image[channel][0, row - start:row + start + 1,
+                    input_image[channel][row][col] = sum(sum(input_image[channel, row - start:row + start + 1,
                                                              col - start:col + start + 1] * kernel_matrix.get_mask_matrix()))
                     input_image[channel][row][col] /= kernel_matrix.coefficient
         return input_image
