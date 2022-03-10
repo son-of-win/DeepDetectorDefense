@@ -1,5 +1,6 @@
 from utils import *
 import time
+import numpy as np
 
 
 def test_mnist_data(train_data, train_label, is_adv, Classifier, detectorFilter):
