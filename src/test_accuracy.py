@@ -45,6 +45,7 @@ def test_mnist_data(train_data, train_label, is_adv, Classifier, detectorFilter)
     # print("Recall: %.4f\nPrecision: %.4f"%(recall, precision))
     print("TP: %d, FP: %d, FN: %d, TN: %d \n" % (TP, FP, FN, TN))
 
+
 def test_mnist_only_scalar(train_data, train_label, is_adv, Classifier, detectorFilter):
     TN = 0
     TP = 0
