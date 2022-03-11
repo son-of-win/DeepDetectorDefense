@@ -23,7 +23,7 @@ class DefenderModel:
         if image.shape[0] == 1:
             image_data = image * 255
         else:
-            image = np.array(image, dtype=np.float32)
+            image_data = np.array(image, dtype=np.float32)
         image_data //= interval
         image_data *= interval
         if not left:
