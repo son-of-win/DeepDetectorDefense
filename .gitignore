@@ -3,6 +3,7 @@
 # Ignore all numpy binary files
 *.npy
 
+/.idea/*
 # Ignore all __pycache__ folders
 __pycache__
 
