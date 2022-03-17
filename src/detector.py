@@ -1,6 +1,7 @@
-import math
+import time
 from filter_mask import *
 import numpy as np
+from skimage.measure import shannon_entropy
 
 
 class DefenderModel:
@@ -20,58 +21,34 @@ class DefenderModel:
         :param left:
         :return:
         """
-        if image.shape[0] == 1:
-            image_data = image * 255
-        else:
-            image_data = np.array(image, dtype=np.float32)
+        image = image * 255
+        image_data = np.array(image, dtype=np.float32)
         image_data //= interval
         image_data *= interval
         if not left:
             halfInterval = interval // 2
             image_data = image_data + halfInterval
-        if image.shape[0] == 1:
-            image_data /= 255.0
+        image_data /= 255.0
 
         return image_data
 
     def caculateEntropy(self, image):
-        if image.shape[0] == 0:
-            expandImage = np.array(image * 255.0, dtype=np.int16)
-        else:
-            expandImage = np.array(image, dtype=np.int16)
-        H = 0
-        for c in range(self.image_channel):
-            fi = np.zeros(256, dtype='float32')
-            for i in range(self.image_size):
-                for j in range(self.image_size):
-                    fi[expandImage[c][i][j]] += 1
-            fi = fi / np.power(self.image_size, 2, dtype='float32')
-            Hi = 0
-            for i in range(256):
-                if fi[i] > 0:
-                    Hi += fi[i] * math.log(fi[i], 2)
-            H += Hi
-        return -H / self.image_channel
+        return shannon_entropy(image)
 
     def chooseCloserFilter(self, origin_image, filter1_image, filter2_image):
         """
-
         :param origin_image: origin
         :param filter1_image: output of filter1
         :param filter2_image: output of filter2
         :return:
         """
-        result = np.zeros_like(origin_image)
-        for i in range(self.image_channel):
-            for j in range(self.image_size):
-                for k in range(self.image_size):
-                    a = abs(filter1_image[i][j][k] - origin_image[i][j][k])
-                    b = abs(filter2_image[i][j][k] - origin_image[i][j][k])
-                    if a < b:
-                        result[i][j][k] = filter1_image[i][j][k]
-                    else:
-                        result[i][j][k] = filter2_image[i][j][k]
+        distance1 = np.absolute(filter1_image - origin_image)
+        distance2 = np.absolute(filter2_image - origin_image)
+        result = filter1_image
+        smaller_index = np.where(distance1 > distance2)
+        result[smaller_index] = filter2_image[smaller_index]
         return result
+
 
     def MeanFilter(self, input_image, filter_size, type_filter):
         """

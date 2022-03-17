@@ -2,6 +2,22 @@ from utils import *
 import time
 import numpy as np
 
+def get_output_image(image, detectorFilter):
+    image_reshape = np.reshape(image,
+                               (detectorFilter.image_channel, detectorFilter.image_size, detectorFilter.image_size))
+    imageEntropy = detectorFilter.caculateEntropy(image_reshape)
+    if imageEntropy < 4:
+        current_image_res = detectorFilter.scalarQuantization(image_reshape, 128)
+    elif imageEntropy < 5:
+        current_image_res = detectorFilter.scalarQuantization(image_reshape, 64)
+    else:
+        current_image_ASQ = detectorFilter.scalarQuantization(image_reshape, 43)
+        current_image_crossMean = detectorFilter.MeanFilter(current_image_ASQ, 7, 'cross')
+        current_image_res = detectorFilter.chooseCloserFilter(imageEntropy, current_image_ASQ,
+                                                              current_image_crossMean)
+    current_x_res = np.reshape(current_image_res,
+                               (detectorFilter.image_size, detectorFilter.image_size, detectorFilter.image_channel))
+    return current_x_res
 
 def test_mnist_data(train_data, train_label, is_adv, Classifier, detectorFilter):
     TN = 0
