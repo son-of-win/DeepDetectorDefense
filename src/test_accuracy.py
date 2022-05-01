@@ -11,10 +11,11 @@ def get_output_image(image, detectorFilter):
     elif imageEntropy < 5:
         current_image_res = detectorFilter.scalarQuantization(image_reshape, 64)
     else:
-        current_image_ASQ = detectorFilter.scalarQuantization(image_reshape, 43)
-        current_image_crossMean = detectorFilter.MeanFilter(current_image_ASQ, 7, 'cross')
+        current_image_ASQ = detectorFilter.scalarQuantization(image_reshape,8)
+        current_image_crossMean = detectorFilter.MeanFilter(current_image_ASQ, 19, 'cross')
         current_image_res = detectorFilter.chooseCloserFilter(imageEntropy, current_image_ASQ,
                                                               current_image_crossMean)
+        # print(abs(image_reshape - current_image_ASQ))
     current_x_res = np.reshape(current_image_res,
                                (detectorFilter.image_size, detectorFilter.image_size, detectorFilter.image_channel))
     return current_x_res

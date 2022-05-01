@@ -1,6 +1,4 @@
 import numpy as np
-
-
 class Filter:
     def __init__(self, filter_size, filter_type):
         """
@@ -42,5 +40,3 @@ class Filter:
                             filter_matrix[self.filter_size - 1 - i][j] = 1
             filter_matrix[half] = [1]
         return filter_matrix
-
-

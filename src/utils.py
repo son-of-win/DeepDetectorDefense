@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from keras.datasets import mnist, cifar10
-
+import matplotlib.pyplot as plt
 
 def data_preprocessing_mnist(val_ratio):
     (x_train_all, y_train_all), (x_test, y_test) = mnist.load_data()
@@ -29,7 +29,7 @@ def data_preprocessing_cifar10(val_ratio):
     x_test = x_test.astype('float32') / 255.0
 
     y_train_all = tf.keras.utils.to_categorical(y_train_all, 10)
-    y_test = tf.keras.utils.to_categorical(y_test)
+    y_test = tf.keras.utils.to_categorical(y_test, 10)
 
     x_train, x_val, y_train, y_val = train_test_split(x_train_all, y_train_all, test_size=val_ratio)
     return (x_train, y_train), (x_val, y_val), (x_test, y_test)
@@ -52,3 +52,14 @@ def shuffle_data(origin_data, origin_label, adv_data, adv_label):
     for data in data_train:
         train_data.append(np.array(data))
     return np.array(train_data), label_train, is_adv
+
+def plot_image(images, save_name):
+    plt.figure(figsize=(10, 10))
+    start_index = 0
+    for i in range(100):
+        plt.subplot(10, 10, i + 1)
+        plt.grid(False)
+        plt.xticks([])
+        plt.yticks([])
+        plt.imshow(images[start_index + i])
+    plt.savefig(save_name + '.png')
